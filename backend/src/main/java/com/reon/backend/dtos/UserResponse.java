@@ -14,9 +14,11 @@ import java.util.Set;
 @NoArgsConstructor
 public class UserResponse {
     private String id;
+    private String name;
     private String email;
     private String password;
     private Set<User.Role> roles;
+    private boolean emailVerified;
     private boolean accountEnabled;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;

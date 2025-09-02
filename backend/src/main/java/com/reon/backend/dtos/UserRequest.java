@@ -12,6 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRequest {
+    @NotBlank(message = "Name is required")
+    @Pattern(
+            regexp = "^[A-Za-z' ]+$",
+            message = "Please provide valid name. [numbers and symbols not allowed]"
+    )
+    private String name;
+
     @NotBlank(message = "Mention your email id.")
     @Email(
             regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",

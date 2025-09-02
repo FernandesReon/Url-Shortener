@@ -18,6 +18,9 @@ public class User {
     @Id
     private String id;
 
+    @Column(nullable = false)
+    private String name;
+
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -28,14 +31,19 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = EnumSet.of(Role.USER);
 
-    // TODO:: set to false once verification is setup
-    private boolean accountEnabled = true;
+    private boolean emailVerified = false;
+    private boolean accountEnabled = false;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdOn;
 
     @Column(nullable = false)
     private LocalDateTime updatedOn;
+
+    // TODO:: set to false once verification is setup
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "token_id", referencedColumnName = "id")
+    private VerificationToken token;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<UrlMapping> urlMappings;

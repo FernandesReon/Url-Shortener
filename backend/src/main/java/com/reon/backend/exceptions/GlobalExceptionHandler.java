@@ -39,4 +39,20 @@ public class GlobalExceptionHandler {
         error.put("message", "User not found.");
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidOTPException.class)
+    public ResponseEntity<Map<String, String>> handleException(InvalidOTPException exception) {
+        log.info("invalid otp: {}", exception.getMessage());
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "Invalid OTP.");
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OTPExpiredException.class)
+    public ResponseEntity<Map<String, String>> handleException(OTPExpiredException exception) {
+        log.info("OTP expired: {}", exception.getMessage());
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "OTP has expired.");
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 }
