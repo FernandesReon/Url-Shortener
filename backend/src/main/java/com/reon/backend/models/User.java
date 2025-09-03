@@ -4,17 +4,22 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     private String id;
 
@@ -40,7 +45,6 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedOn;
 
-    // TODO:: set to false once verification is setup
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "token_id", referencedColumnName = "id")
     private VerificationToken token;
@@ -58,6 +62,23 @@ public class User {
     @PreUpdate
     public void preUpdate() {
         this.updatedOn = LocalDateTime.now();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream().map(
+                role -> new SimpleGrantedAuthority("ROLE_" + role.name())
+        ).collect(Collectors.toSet());
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.accountEnabled;
     }
 
     public enum Role {
