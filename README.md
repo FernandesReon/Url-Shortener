@@ -8,6 +8,8 @@ uses JWT-based authentication for security and is containerized with Docker for 
 - [What it does](#what-it-does)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
+- [Prerequisites](#prerequisites)
+- [Setup Instructions](#setup-instructions)
 
 ## What it does?
 Imagine you have a long web address that's hard to share because it's filled with random letters and numbers. 
@@ -32,3 +34,51 @@ It’s secure, user-friendly, and works on any device, with features to keep you
 - **Containerization**: Docker
 - **Tools**: Maven(backend build), Axios(frontend HTTP requests)
 
+## Prerequisites
+To run this project, you'll need:
+- Java 17 or higher
+- Node.js 22 or higher
+- MySQL 8.0 or higher
+- Docker
+- Maven (for building the backend)
+
+## Setup Instructions
+1. Clone the Repository
+    - Download the project code to your computer:
+    ```bash
+   git clone https://github.com/FernandesReon/url-shortener.git
+   cd url-shortener
+   ```
+2. Backend Setup (Spring Boot)
+   - Go to the backend folder
+    ```bash
+   cd backend
+   ```
+   - Create a MySQL database:
+   ```bash
+    CREATE DATABASE url_shortener;
+   ```
+   - Set up MySQL in the configuration file: src/main/resource/application.properties
+   ```bash
+    spring.datasource.url=jdbc:mysql://localhost:3306/url_shortener
+    spring.datasource.username=your_username
+    spring.datasource.password=your_password
+    spring.jpa.hibernate.ddl-auto=update
+   ```
+   - Build and start the backend
+   ```bash 
+   mvn spring-boot:run
+   ```
+3. Frontend Setup (React.js)
+    - Go to the frontend folder:
+   ```bash
+   cd frontend
+    ```
+   - Install the required packages:
+   ```bash
+   npm install
+   ```
+   - Run the project:
+   ```bash
+   npm run dev
+   ```
