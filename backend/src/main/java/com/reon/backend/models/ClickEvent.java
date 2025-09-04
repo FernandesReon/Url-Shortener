@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "click_analytics")
 public class ClickEvent {
+
+    // TODO :: analytics for ipAddress, country, browser etc...
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

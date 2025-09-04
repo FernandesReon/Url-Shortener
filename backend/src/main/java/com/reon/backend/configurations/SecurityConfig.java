@@ -32,6 +32,15 @@ public class SecurityConfig {
     private final String[] public_urls = {
             "/api/auth/**",
             "/api/otp/**",
+            "/api/redirect/**"
+    };
+
+    // TODO:: make a decision whether to make "/api/redirect/**" a public or authenticated endpoint
+    // TODO :: write a logic to delete the cookie once's jwt expires, yet till now refresh token logic not written.
+
+    private final String[] authenticated_urls = {
+            "/api/user/**",
+            "/api/url/**"
     };
 
     @Value("${frontend.url}")
@@ -51,7 +60,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers(public_urls).permitAll()
-                                .requestMatchers("/api/user/**").authenticated()
+                                .requestMatchers(authenticated_urls).authenticated()
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                         )

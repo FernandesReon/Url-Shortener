@@ -4,6 +4,7 @@ import com.reon.backend.dtos.LoginRequest;
 import com.reon.backend.dtos.UserRequest;
 import com.reon.backend.dtos.UserResponse;
 import com.reon.backend.exceptions.EmailAlreadyExistsException;
+import com.reon.backend.exceptions.UserNotFoundException;
 import com.reon.backend.jwt.JwtResponse;
 import com.reon.backend.jwt.JwtUtils;
 import com.reon.backend.mappers.UserMapper;

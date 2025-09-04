@@ -15,6 +15,9 @@ import java.util.List;
 @Entity
 @Table(name = "url_info")
 public class UrlMapping {
+
+    // TODO :: later include custom alias for premium users, expiration time.
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,21 +25,16 @@ public class UrlMapping {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String longUrl;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String shortUrl;
 
-    @Column
-    private String customAlias;
     private long clickedCounts = 0;
 
     @Column(nullable = false)
     private LocalDateTime createdOn;
 
     @Column
-    private LocalDateTime expiryDate = null;
-
-    @Column(nullable = false)
-    private boolean isActive = true;
+    private boolean isActive = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -45,4 +43,9 @@ public class UrlMapping {
 
     @OneToMany(mappedBy = "urlMapping", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ClickEvent> clickEvents;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdOn = LocalDateTime.now();
+    }
 }

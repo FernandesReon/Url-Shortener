@@ -61,16 +61,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleException(BadCredentialsException exception) {
         log.info(exception.getMessage());
-        Map<String, String> errors = new HashMap<>();
-        errors.put("credentials", "Provided credentials are incorrect.");
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        Map<String, String> error = new HashMap<>();
+        error.put("credentials", "Provided credentials are incorrect.");
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<Map<String, String>> handleException(DisabledException exception) {
         log.info(exception.getMessage());
-        Map<String, String> errors = new HashMap<>();
-        errors.put("disabled", "Account is disabled. Contact your administrator.");
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        Map<String, String> error = new HashMap<>();
+        error.put("disabled", "Account is disabled. Contact your administrator.");
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ShortCodeException.class)
+    public ResponseEntity<Map<String, String>> handleException(ShortCodeException exception) {
+        log.info(exception.getMessage());
+        Map<String, String> error = new HashMap<>();
+        error.put("shortCode", "Short Url not found");
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }
