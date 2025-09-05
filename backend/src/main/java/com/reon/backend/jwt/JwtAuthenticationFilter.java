@@ -3,6 +3,7 @@ package com.reon.backend.jwt;
 import com.reon.backend.services.impl.CustomUserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -56,9 +57,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (RuntimeException exception) {
             log.warn("JWT expired or invalid: {}", exception.getMessage());
+            deleteCookie(response);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
         filterChain.doFilter(request, response);
+    }
+
+    private void deleteCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("JWT", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(false);
+        cookie.setMaxAge(0);
+        cookie.setAttribute("SameSite", "Strict");
+        response.addCookie(cookie);
     }
 }
