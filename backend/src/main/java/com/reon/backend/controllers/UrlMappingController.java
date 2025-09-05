@@ -9,13 +9,11 @@ import com.reon.backend.services.UrlMappingService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -46,8 +44,29 @@ public class UrlMappingController {
                 () -> new UserNotFoundException("User not found with email: " + principal.getName())
         );
         UrlResponse urlResponse = urlMappingService.createShortUrl(urlRequest, user);
+        log.info("Url Mapping Controller :: Created a short url: {}, for long url: {}", urlResponse.getShortUrl(), urlResponse.getLongUrl());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(urlResponse);
+    }
+
+    @GetMapping(
+            name = "endpoint for fetching all urls"
+    )
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Page<UrlResponse>> fetchAllUrls(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            Principal principal)
+    {
+        log.info("Url Mapping Controller :: Fetching urls for page: {}, size: {}", page, size);
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(
+                () -> new UserNotFoundException("User not found with email: " + principal.getName())
+        );
+        Page<UrlResponse> url_list = urlMappingService.viewAllUrls(page, size, user);
+        log.info("Url Mapping Controller :: Fetched urls for page: {}, size: {}", page, size);
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .body(url_list);
     }
 }

@@ -1,9 +1,13 @@
 package com.reon.backend.mappers;
 
+import com.reon.backend.dtos.analytics.ClickEventResponse;
 import com.reon.backend.dtos.url.UrlRequest;
 import com.reon.backend.dtos.url.UrlResponse;
 import com.reon.backend.models.UrlMapping;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UrlMapper {
@@ -25,10 +29,18 @@ public class UrlMapper {
         response.setClickedCounts(urlMapping.getClickedCounts());
         response.setCreatedOn(urlMapping.getCreatedOn());
         response.setActive(urlMapping.isActive());
-        response.setClickEvents(urlMapping.getClickEvents());
 
         if (urlMapping.getUser() != null) {
             response.setUserId(urlMapping.getUser().getId());
+        }
+
+        // to avoid recursive behavior
+        if (urlMapping.getClickEvents() != null) {
+            response.setClickEvents(urlMapping.getClickEvents().stream()
+                    .map(event -> new ClickEventResponse(
+                            event.getId(), event.getTimestamp()
+                    ))
+                    .collect(Collectors.toList()));
         }
 
         return response;

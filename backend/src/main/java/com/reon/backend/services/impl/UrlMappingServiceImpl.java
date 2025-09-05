@@ -4,22 +4,29 @@ import com.reon.backend.dtos.url.UrlRequest;
 import com.reon.backend.dtos.url.UrlResponse;
 import com.reon.backend.exceptions.ShortCodeException;
 import com.reon.backend.mappers.UrlMapper;
+import com.reon.backend.models.ClickEvent;
 import com.reon.backend.models.UrlMapping;
 import com.reon.backend.models.User;
+import com.reon.backend.repositories.ClickEventRepository;
 import com.reon.backend.repositories.UrlMappingRepository;
 import com.reon.backend.services.UrlMappingService;
 import com.reon.backend.utils.Base62Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UrlMappingServiceImpl implements UrlMappingService {
     private final Logger log = LoggerFactory.getLogger(UrlMappingServiceImpl.class);
     private final UrlMappingRepository urlMappingRepository;
+    private final ClickEventRepository eventRepository;
 
-    public UrlMappingServiceImpl(UrlMappingRepository urlMappingRepository) {
+    public UrlMappingServiceImpl(UrlMappingRepository urlMappingRepository, ClickEventRepository eventRepository) {
         this.urlMappingRepository = urlMappingRepository;
+        this.eventRepository = eventRepository;
     }
 
     // TODO :: later include analytics
@@ -61,6 +68,18 @@ public class UrlMappingServiceImpl implements UrlMappingService {
 
         log.info("Url Mapping Service :: Redirecting shortCode: {} -> {}", shortCode, mapping.getLongUrl());
 
+        ClickEvent event = new ClickEvent();
+        event.setUrlMapping(mapping);
+        eventRepository.save(event);
+
         return UrlMapper.responseToUser(mapping);
+    }
+
+    @Override
+    public Page<UrlResponse> viewAllUrls(int page, int size, User user) {
+        log.info("Url Mapping Service :: Fetching urls for page: {}, size: {}", page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<UrlMapping> mappings = urlMappingRepository.findByUser(user, pageable);
+        return mappings.map(UrlMapper::responseToUser);
     }
 }

@@ -1,6 +1,6 @@
 package com.reon.backend.dtos.url;
 
-import com.reon.backend.models.ClickEvent;
+import com.reon.backend.dtos.analytics.ClickEventResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +19,6 @@ public class UrlResponse {
     private LocalDateTime createdOn;
     private boolean isActive;
     private String userId;
-    private List<ClickEvent> clickEvents;
+    // not exposing complete entity -- if done so will create infinity looping.
+    private List<ClickEventResponse> clickEvents;
 }
