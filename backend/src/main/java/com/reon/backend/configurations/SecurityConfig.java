@@ -36,7 +36,6 @@ public class SecurityConfig {
     };
 
     // TODO:: make a decision whether to make "/api/redirect/**" a public or authenticated endpoint
-    // TODO :: write a logic to delete the cookie once's jwt expires, yet till now refresh token logic not written.
 
     private final String[] authenticated_urls = {
             "/api/user/**",
@@ -66,7 +65,6 @@ public class SecurityConfig {
                         )
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                // TODO: include jwt authentication filter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
                         session
@@ -92,7 +90,6 @@ public class SecurityConfig {
         return new ProviderManager(authenticationProvider);
     }
 
-    // TODO: Configure cors
     private CorsConfigurationSource configurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(frontend_url));
