@@ -39,7 +39,8 @@ public class SecurityConfig {
 
     private final String[] authenticated_urls = {
             "/api/user/**",
-            "/api/url/**"
+            "/api/url/**",
+            "/api/analytics/**"
     };
 
     @Value("${frontend.url}")
