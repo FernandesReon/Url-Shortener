@@ -6,7 +6,6 @@ import com.reon.backend.dtos.url.UrlResponse;
 import com.reon.backend.models.UrlMapping;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component

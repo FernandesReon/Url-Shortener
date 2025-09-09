@@ -1,5 +1,6 @@
 package com.reon.backend.mappers;
 
+import com.reon.backend.dtos.UserProfile;
 import com.reon.backend.dtos.UserRequest;
 import com.reon.backend.dtos.UserResponse;
 import com.reon.backend.models.User;
@@ -28,5 +29,12 @@ public class UserMapper {
         response.setUpdatedOn(response.getCreatedOn());
         response.setUrlMappings(user.getUrlMappings());
         return response;
+    }
+
+    public static UserProfile toProfile(User user) {
+        UserProfile profile = new UserProfile();
+        profile.setName(user.getName());
+        profile.setEmail(user.getEmail());
+        return profile;
     }
 }

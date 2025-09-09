@@ -1,6 +1,7 @@
 package com.reon.backend.services.impl;
 
 import com.reon.backend.dtos.LoginRequest;
+import com.reon.backend.dtos.UserProfile;
 import com.reon.backend.dtos.UserRequest;
 import com.reon.backend.dtos.UserResponse;
 import com.reon.backend.exceptions.EmailAlreadyExistsException;
@@ -77,5 +78,15 @@ public class UserServiceImpl implements UserService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String jwtToken = jwtUtils.generateToken((User) userDetails);
         return new JwtResponse(jwtToken);
+    }
+
+    @Override
+    public UserProfile profile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new UserNotFoundException("User with email: " + email + " not found.")
+        );
+        return UserMapper.toProfile(user);
     }
 }
