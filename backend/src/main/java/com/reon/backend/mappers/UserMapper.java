@@ -21,7 +21,6 @@ public class UserMapper {
         response.setId(user.getId());
         response.setName(user.getName());
         response.setEmail(user.getEmail());
-        response.setPassword(user.getPassword());
         response.setRoles(user.getRoles());
         response.setEmailVerified(user.isEmailVerified());
         response.setAccountEnabled(user.isAccountEnabled());

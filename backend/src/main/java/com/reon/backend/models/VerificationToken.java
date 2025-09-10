@@ -1,12 +1,12 @@
 package com.reon.backend.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-@Data
+import java.util.Objects;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -21,4 +21,16 @@ public class VerificationToken {
     @OneToOne(mappedBy = "token")
     @ToString.Exclude
     private User user;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof VerificationToken code)) return false;
+        return Objects.equals(id, code.id);
+    }
 }

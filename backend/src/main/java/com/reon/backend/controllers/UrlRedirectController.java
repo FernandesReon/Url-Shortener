@@ -1,6 +1,7 @@
 package com.reon.backend.controllers;
 
 import com.reon.backend.dtos.url.UrlResponse;
+import com.reon.backend.exceptions.ShortCodeException;
 import com.reon.backend.services.UrlMappingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +34,8 @@ public class UrlRedirectController {
     )
     public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
         log.info("Url Redirect Controller :: Incoming request for redirecting shortUrl: {}", shortCode);
-        UrlResponse response = urlMappingService.getOriginalUrl(shortCode);
-        if (response != null) {
+        try {
+            UrlResponse response = urlMappingService.getOriginalUrl(shortCode);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(response.getLongUrl()));
             log.info("Url Redirect Controller :: Redirecting shortUrl: {}", shortCode);
@@ -42,9 +43,11 @@ public class UrlRedirectController {
                     .status(HttpStatus.FOUND)
                     .headers(headers)
                     .build();
+        } catch (ShortCodeException exception) {
+            log.warn("Url Redirect Controller :: Failed to redirect shortUrl: {}. Reason: {}", shortCode, exception.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
         }
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .build();
     }
 }

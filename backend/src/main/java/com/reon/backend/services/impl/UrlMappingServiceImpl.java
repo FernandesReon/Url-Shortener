@@ -13,6 +13,7 @@ import com.reon.backend.services.UrlMappingService;
 import com.reon.backend.utils.Base62Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,9 @@ public class UrlMappingServiceImpl implements UrlMappingService {
     private final Logger log = LoggerFactory.getLogger(UrlMappingServiceImpl.class);
     private final UrlMappingRepository urlMappingRepository;
     private final ClickEventRepository eventRepository;
+
+    @Value("${app.base_url}")
+    private String baseUrl;
 
     public UrlMappingServiceImpl(UrlMappingRepository urlMappingRepository, ClickEventRepository eventRepository) {
         this.urlMappingRepository = urlMappingRepository;
@@ -46,8 +50,9 @@ public class UrlMappingServiceImpl implements UrlMappingService {
         urlMappingRepository.save(mapping);
 
         log.info("Url Mapping Service :: Short url created for user: {}, longUrl: {}, shortUrl: {}", user.getName(), urlRequest.getLongUrl(), shortCode);
-
-        return UrlMapper.responseToUser(mapping);
+        UrlResponse response = UrlMapper.responseToUser(mapping);
+        response.setShortUrl(baseUrl + "/" + shortCode);
+        return response;
     }
 
     @Override
@@ -72,7 +77,9 @@ public class UrlMappingServiceImpl implements UrlMappingService {
         event.setUrlMapping(mapping);
         eventRepository.save(event);
 
-        return UrlMapper.responseToUser(mapping);
+        UrlResponse response = UrlMapper.responseToUser(mapping);
+        response.setShortUrl(baseUrl + "/" + shortCode);
+        return response;
     }
 
     @Override
@@ -80,6 +87,11 @@ public class UrlMappingServiceImpl implements UrlMappingService {
         log.info("Url Mapping Service :: Fetching urls for page: {}, size: {}", page, size);
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<UrlMapping> mappings = urlMappingRepository.findByUser(user, pageable);
-        return mappings.map(UrlMapper::responseToUser);
+
+        return mappings.map(mapping -> {
+            UrlResponse response = UrlMapper.responseToUser(mapping);
+            response.setShortUrl(baseUrl + "/" + response.getShortUrl());
+            return response;
+        });
     }
 }
