@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleException(EmailAlreadyExistsException exception) {
         log.info("email exception: {}", exception.getMessage());
         Map<String, String> error = new HashMap<>();
-        error.put("message", "User with this email already exists.");
+        error.put("email", "User with this email already exists.");
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 

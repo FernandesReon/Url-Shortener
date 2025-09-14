@@ -32,7 +32,7 @@ public class UserController {
         UserProfile profile = userService.profile();
         log.info("User Controller :: User Profile fetched successfully.");
         return ResponseEntity
-                .status(HttpStatus.FOUND)
+                .status(HttpStatus.OK)
                 .body(profile);
     }
 }

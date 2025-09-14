@@ -48,7 +48,7 @@ public class AnalyticsController {
         List<Analytics> analytics = analyticsService.getClicksAnalyticsForLink(shortUrl, from, to);
         log.info("AnalyticsController: Fetched link analytics: {}", analytics);
         return ResponseEntity.
-                status(HttpStatus.FOUND)
+                status(HttpStatus.OK)
                 .body(analytics);
     }
 
@@ -69,7 +69,7 @@ public class AnalyticsController {
         log.info("AnalyticsController :: Fetching overall analytics for timeline - from: {}, to: {}", from, to);
         Map<LocalDate, Long> totalClicks = analyticsService.getClicksAnalyticsForUser(user, from, to);
         return ResponseEntity
-                .status(HttpStatus.FOUND)
+                .status(HttpStatus.OK)
                 .body(totalClicks);
     }
 }

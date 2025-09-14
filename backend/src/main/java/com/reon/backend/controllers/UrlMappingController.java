@@ -66,7 +66,7 @@ public class UrlMappingController {
         Page<UrlResponse> url_list = urlMappingService.viewAllUrls(page, size, user);
         log.info("Url Mapping Controller :: Fetched urls for page: {}, size: {}", page, size);
         return ResponseEntity
-                .status(HttpStatus.FOUND)
+                .status(HttpStatus.OK)
                 .body(url_list);
     }
 }

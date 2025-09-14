@@ -32,8 +32,10 @@ public class UserMapper {
 
     public static UserProfile toProfile(User user) {
         UserProfile profile = new UserProfile();
+        profile.setId(user.getId());
         profile.setName(user.getName());
         profile.setEmail(user.getEmail());
+        profile.setRoles(user.getRoles());
         return profile;
     }
 }
