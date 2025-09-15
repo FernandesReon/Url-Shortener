@@ -1,69 +1,66 @@
-import { useEffect, useRef, useState, useMemo } from "react"
-
-const dummyData = [
-    { date: "2025-08-02", clicks: 10 },
-    { date: "2025-09-02", clicks: 120 },
-    { date: "2025-09-03", clicks: 150 },
-    { date: "2025-09-04", clicks: 180 },
-    { date: "2025-09-05", clicks: 200 },
-    { date: "2025-09-06", clicks: 170 },
-    { date: "2025-09-07", clicks: 190 },
-    { date: "2025-09-08", clicks: 210 },
-]
+import { useEffect, useRef, useState, useMemo } from "react";
 
 const Analytics_Chart = ({ data, onDateChange }) => {
-    const chartData = data && data.length > 0 ? data : dummyData;
+    const chartData = data ?? [];
 
-    const canvasRef = useRef(null)
-    const chartRef = useRef(null)
+    const canvasRef = useRef(null);
+    const chartRef = useRef(null);
+
+    // Set dateFrom to the first day of the current month
     const [dateFrom, setDateFrom] = useState(() => {
-        const date = new Date()
-        date.setDate(date.getDate() - 7)
-        return date.toISOString().split("T")[0]
-    })
+        const today = new Date();
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        return firstDayOfMonth.toISOString().split("T")[0];
+    });
+
+    // Set dateTo to tomorrow
     const [dateTo, setDateTo] = useState(() => {
-        return new Date().toISOString().split("T")[0]
-    })
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1); // Set to +1 day
+        return tomorrow.toISOString().split("T")[0];
+    });
 
     const filteredData = useMemo(() => {
-        return chartData.filter((item) => {
-            const itemDate = new Date(item.date)
-            const fromDate = new Date(dateFrom)
-            const toDate = new Date(dateTo)
-            return itemDate >= fromDate && itemDate <= toDate
-        }).sort((a, b) => new Date(a.date) - new Date(b.date))
-    }, [chartData, dateFrom, dateTo])
+        if (!dateFrom || !dateTo) return chartData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        const fromDate = new Date(dateFrom);
+        const toDate = new Date(dateTo);
+        return chartData
+            .filter((item) => {
+                const itemDate = new Date(item.date);
+                return itemDate >= fromDate && itemDate <= toDate;
+            })
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+    }, [chartData, dateFrom, dateTo]);
 
     useEffect(() => {
         const loadChart = async () => {
-            const { Chart, registerables } = await import("chart.js")
-            Chart.register(...registerables)
+            const { Chart, registerables } = await import("chart.js");
+            Chart.register(...registerables);
 
             if (canvasRef.current) {
-                if (chartRef.current) {
-                    chartRef.current.destroy()
-                }
+                if (chartRef.current) chartRef.current.destroy();
 
-                const ctx = canvasRef.current.getContext("2d")
+                const ctx = canvasRef.current.getContext("2d");
                 if (ctx) {
                     chartRef.current = new Chart(ctx, {
                         type: "line",
                         data: {
                             labels: filteredData.map((d) => {
-                                const date = new Date(d.date)
-                                return date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                                const date = new Date(d.date);
+                                return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
                             }),
                             datasets: [
                                 {
                                     label: "Clicks",
                                     data: filteredData.map((d) => d.clicks),
-                                    borderColor: "#4f46e5", // Indigo
-                                    backgroundColor: "rgba(79, 70, 229, 0.1)", // Indigo with opacity
+                                    borderColor: "#4f46e5",
+                                    backgroundColor: "rgba(79, 70, 229, 0.1)",
                                     borderWidth: 3,
                                     fill: true,
                                     tension: 0.4,
-                                    pointBackgroundColor: "#4f46e5", // Indigo
-                                    pointBorderColor: "#4f46e5", // Indigo
+                                    pointBackgroundColor: "#4f46e5",
+                                    pointBorderColor: "#4f46e5",
                                     pointRadius: 6,
                                     pointHoverRadius: 8,
                                 },
@@ -73,54 +70,31 @@ const Analytics_Chart = ({ data, onDateChange }) => {
                             responsive: true,
                             maintainAspectRatio: false,
                             plugins: {
-                                legend: {
-                                    display: false,
-                                },
+                                legend: { display: false },
                             },
                             scales: {
                                 y: {
                                     beginAtZero: true,
-                                    grid: {
-                                        color: "#e5e7eb", // Light gray for grid, visible on white bg
-                                    },
-                                    ticks: {
-                                        color: "#000000", // Black
-                                        font: {
-                                            size: 12,
-                                        },
-                                    },
+                                    grid: { color: "#e5e7eb" },
+                                    ticks: { color: "#000000", font: { size: 12 } },
                                 },
                                 x: {
-                                    grid: {
-                                        display: false,
-                                    },
-                                    ticks: {
-                                        color: "#000000", // Black
-                                        font: {
-                                            size: 12,
-                                        },
-                                    },
-                                },
-                            },
-                            elements: {
-                                point: {
-                                    hoverBackgroundColor: "#4f46e5", // Indigo
+                                    grid: { display: false },
+                                    ticks: { color: "#000000", font: { size: 12 } },
                                 },
                             },
                         },
-                    })
+                    });
                 }
             }
-        }
+        };
 
-        loadChart()
+        loadChart();
 
         return () => {
-            if (chartRef.current) {
-                chartRef.current.destroy()
-            }
-        }
-    }, [filteredData])
+            if (chartRef.current) chartRef.current.destroy();
+        };
+    }, [filteredData]);
 
     return (
         <div className="bg-white rounded-lg p-6 shadow-xl border border-gray-50">
@@ -135,9 +109,7 @@ const Analytics_Chart = ({ data, onDateChange }) => {
                             max={dateTo}
                             onChange={(e) => {
                                 setDateFrom(e.target.value);
-                                if (onDateChange) {
-                                    onDateChange(new Date(e.target.value), new Date(dateTo));
-                                }
+                                if (onDateChange) onDateChange(new Date(e.target.value), new Date(dateTo));
                             }}
                             className="px-3 py-1 border border-gray-400 rounded text-sm text-black focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
                         />
@@ -150,9 +122,7 @@ const Analytics_Chart = ({ data, onDateChange }) => {
                             min={dateFrom}
                             onChange={(e) => {
                                 setDateTo(e.target.value);
-                                if (onDateChange) {
-                                    onDateChange(new Date(dateFrom), new Date(e.target.value));
-                                }
+                                if (onDateChange) onDateChange(new Date(dateFrom), new Date(e.target.value));
                             }}
                             className="px-3 py-1 border border-gray-400 rounded text-sm text-black focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
                         />
@@ -164,11 +134,11 @@ const Analytics_Chart = ({ data, onDateChange }) => {
             </div>
             <div className="mt-4 text-center">
                 <span className="text-sm text-black">
-                    Total Clicks: {filteredData.reduce((sum, d) => sum + d.clicks, 0)}
+                    Total Clicks: {filteredData.length > 0 ? filteredData.reduce((sum, d) => sum + d.clicks, 0) : 0}
                 </span>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Analytics_Chart;
