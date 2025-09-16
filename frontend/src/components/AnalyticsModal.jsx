@@ -250,13 +250,13 @@ const AnalyticsModal = ({ url, isOpen, onClose }) => {
                             <label className="text-sm font-medium text-black uppercase tracking-wide">
                                 Status
                             </label>
-                            <span
-                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            <p
+                                className={`w-fit items-center px-2.5 py-0.5 rounded-full text-sm font-medium ${
                                     url.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                                 }`}
                             >
                                 {url.isActive ? "Active" : "Inactive"}
-                            </span>
+                            </p>
                         </div>
 
                         <div>
