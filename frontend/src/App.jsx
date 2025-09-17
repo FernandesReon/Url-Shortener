@@ -30,7 +30,7 @@ const App = () => {
                         }
                     />
                 </Route>
-                {/* <Route path="admin">
+                <Route path="admin">
                     <Route
                         path="dashboard"
                         element={
@@ -39,10 +39,6 @@ const App = () => {
                             </ProtectedRoute>
                         }
                     />
-                </Route> */}
-
-                <Route path="admin">
-                    <Route path="dashboard" element={<Admin_Panel />}/>
                 </Route>
 
             </Routes>

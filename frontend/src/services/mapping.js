@@ -18,7 +18,7 @@ export const fetchAllUrlsInfo = async (page = 0, size = 10) => {
         const response = await axiosInstance.get(`${fetchUrls}?page=${page + 1}&${size}`);
         return response.data;
     } catch (error) {
-        console.error("Unexcepted error while fetch urls information");
+        console.error("Unexpected error while fetch urls information");
         throw error;
     }
 }
