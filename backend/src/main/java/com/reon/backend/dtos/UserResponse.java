@@ -1,6 +1,6 @@
 package com.reon.backend.dtos;
 
-import com.reon.backend.models.UrlMapping;
+import com.reon.backend.dtos.url.UrlResponse;
 import com.reon.backend.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +21,5 @@ public class UserResponse {
     private boolean accountEnabled;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
-    private Set<UrlMapping> urlMappings;
+    private Set<UrlResponse> urlMappings;
 }
