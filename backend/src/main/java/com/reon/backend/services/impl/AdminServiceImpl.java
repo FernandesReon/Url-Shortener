@@ -8,6 +8,7 @@ import com.reon.backend.repositories.UserRepository;
 import com.reon.backend.services.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Cacheable(value = "user", key = "#email")
     public UserResponse fetchUserByEmail(String email) {
         log.info("Admin Service: fetching user by email {}", email);
         User findUser = userRepository.findByEmail(email).orElseThrow(

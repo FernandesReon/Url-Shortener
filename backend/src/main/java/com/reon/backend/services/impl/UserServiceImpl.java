@@ -59,7 +59,11 @@ public class UserServiceImpl implements UserService {
         User newUser = userRepository.save(user);
         log.info("User Service:: created new user: {}", newUser);
 
-        otpService.sendVerificationTokenEmail(userRequest.getEmail());
+        try {
+            otpService.sendVerificationTokenEmail(userRequest.getEmail());
+        } catch (Exception e) {
+            log.error("Unexpected error while sending account verification token: {}", e.getMessage());
+        }
 
         return UserMapper.responseToUser(newUser);
     }

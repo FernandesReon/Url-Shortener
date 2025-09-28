@@ -33,8 +33,6 @@ public class UrlMappingServiceImpl implements UrlMappingService {
         this.eventRepository = eventRepository;
     }
 
-    // TODO :: later include analytics
-
     @Override
     public UrlResponse createShortUrl(UrlRequest urlRequest, User user) {
         log.info("Url Mapping Service :: Creating short url for user: {}, url: {}", user.getName(), urlRequest.getLongUrl());
