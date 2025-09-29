@@ -60,7 +60,8 @@ public class AuthController {
         log.info("Auth Controller:: Saving the jwt token to Cookie");
         Cookie cookie = new Cookie("JWT", jwtToken.getToken());
         cookie.setPath("/");
-        cookie.setHttpOnly(false);      // for testing purpose false - else true
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
         cookie.setMaxAge((int) (tokenExpirationTime / 1000));
         cookie.setAttribute("SameSite", "Strict");
         response.addCookie(cookie);
@@ -81,7 +82,7 @@ public class AuthController {
 
         Cookie cookie = new Cookie("JWT", null);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false);
+        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         cookie.setAttribute("SameSite", "Strict");
