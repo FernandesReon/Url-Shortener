@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://spring-url-shortener.netlify.app/</loc>
+    </url>
+    <url>
+        <loc>https://spring-url-shortener.netlify.app/register</loc>
+    </url>
+    <url>
+        <loc>https://spring-url-shortener.netlify.app/verify</loc>
+    </url>
+    <url>
+        <loc>https://spring-url-shortener.netlify.app/forgot-password</loc>
+    </url>
+    <url>
+        <loc>https://spring-url-shortener.netlify.app/forgot-password/verify</loc>
+    </url>
+    <url>
+        <loc>https://spring-url-shortener.netlify.app/reset-password</loc>
+    </url>
+</urlset>

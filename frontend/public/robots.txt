@@ -1,0 +1,8 @@
+User-agent: *
+
+Allow: /
+
+Disallow: /user/
+Disallow: /admin/
+
+Sitemap: https://spring-url-shortener.netlify.app/sitemap.xml
