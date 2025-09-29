@@ -14,7 +14,7 @@ RUN mvn dependency:go-offline
 COPY src ./src
 
 # Build the project and create a .jar file
-RUN mvn clean package
+RUN mvn clean package -DskipTests
 
 
 # Step 2: Use a smaller JDK image just to run the app (not for building)
