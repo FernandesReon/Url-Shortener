@@ -99,10 +99,6 @@ const LoginPage = () => {
                         {error.errors.password && <p className="text-red-500 text-sm font-medium mt-1">{error.errors.password}</p>}
                         {error.errors.credentials && <p className="text-red-500 text-sm font-medium mt-1">{error.errors.credentials}</p>}
                         {error.errors.disabled && <p className="text-red-500 text-sm font-medium mt-1">{error.errors.disabled}</p>}
-
-                        <Link to="/forgot-password" className="mt-2 text-sm text-indigo-600 hover:text-indigo-700 font-medium block text-right">
-                            Forgot password?
-                        </Link>
                     </div>
 
                     <button

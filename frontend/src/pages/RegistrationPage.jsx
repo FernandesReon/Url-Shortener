@@ -31,7 +31,7 @@ const RegistrationPage = () => {
             .then((response) => {
             console.log("Response", response);
 
-            navigate("/verify", { state: { email: formData.email } });
+            navigate("/");
 
             setFormData({
                 name: "",
