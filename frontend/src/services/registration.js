@@ -13,31 +13,3 @@ export const registration = async (userData) => {
         throw error;
     }
 }
-
-export const accountVerification = async (email, code) => {
-    try {
-        const response = await axiosInstance.post(
-            accountVerificationUrl,
-            { verificationCode: code },
-            { params: { email }}
-        );
-        return response.data;
-    } catch (error) {
-        console.error("Unexpected error occurred while verifying the account");
-        throw error;
-    }
-}
-
-export const resendVerificationCode = async (email) => {
-    try {
-        const response = await axiosInstance.post(
-            resendVerificationCodeUrl,
-            null,
-            { params: { email }}
-        );
-        return response.data;
-    } catch (error) {
-        console.error("Unexpected error occurred while resending verification code.");
-        throw error;
-    }
-}

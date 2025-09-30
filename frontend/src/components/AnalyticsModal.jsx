@@ -252,10 +252,10 @@ const AnalyticsModal = ({ url, isOpen, onClose }) => {
                             </label>
                             <p
                                 className={`w-fit items-center px-2.5 py-0.5 rounded-full text-sm font-medium ${
-                                    url.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                                    url.active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                                 }`}
                             >
-                                {url.isActive ? "Active" : "Inactive"}
+                                {url.active ? "Active" : "Inactive"}
                             </p>
                         </div>
 
