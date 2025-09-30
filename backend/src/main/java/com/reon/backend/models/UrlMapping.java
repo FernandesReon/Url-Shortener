@@ -34,7 +34,7 @@ public class UrlMapping {
     private LocalDateTime createdOn;
 
     @Column
-    private boolean isActive = false;
+    private boolean isActive = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

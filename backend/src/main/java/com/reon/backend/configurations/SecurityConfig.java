@@ -31,7 +31,6 @@ import java.util.List;
 public class SecurityConfig {
     private final String[] public_urls = {
             "/api/auth/**",
-            "/api/otp/**",
             "/api/redirect/**"
     };
 

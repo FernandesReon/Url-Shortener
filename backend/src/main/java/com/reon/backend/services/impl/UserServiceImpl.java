@@ -11,7 +11,6 @@ import com.reon.backend.jwt.JwtUtils;
 import com.reon.backend.mappers.UserMapper;
 import com.reon.backend.models.User;
 import com.reon.backend.repositories.UserRepository;
-import com.reon.backend.services.OtpService;
 import com.reon.backend.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,14 +28,14 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
-    private final OtpService otpService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
-    public UserServiceImpl(UserRepository userRepository, OtpService otpService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                           AuthenticationManager authenticationManager, JwtUtils jwtUtils)
+    {
         this.userRepository = userRepository;
-        this.otpService = otpService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
@@ -56,14 +55,11 @@ public class UserServiceImpl implements UserService {
         // password get encoded
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
+        user.setEmailVerified(true);
+        user.setAccountEnabled(true);
+
         User newUser = userRepository.save(user);
         log.info("User Service:: created new user: {}", newUser);
-
-        try {
-            otpService.sendVerificationTokenEmail(userRequest.getEmail());
-        } catch (Exception e) {
-            log.error("Unexpected error while sending account verification token: {}", e.getMessage());
-        }
 
         return UserMapper.responseToUser(newUser);
     }

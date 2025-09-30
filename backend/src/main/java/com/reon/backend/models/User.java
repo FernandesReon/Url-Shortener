@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,10 +48,6 @@ public class User implements UserDetails, Serializable {
     @Column(nullable = false)
     private LocalDateTime updatedOn;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "token_id", referencedColumnName = "id")
-    private VerificationToken token;
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<UrlMapping> urlMappings;
 
@@ -83,18 +78,6 @@ public class User implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return this.accountEnabled;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof User user)) return false;
-        return Objects.equals(id, user.id);
     }
 
     public enum Role {
